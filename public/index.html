@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login Automation Hub</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--fg:#1c2230;--mut:#667;--acc:#2f6fed;--bd:#dde1e8;--ok:#1a8f4c;--bad:#c93a3a}
+@media(prefers-color-scheme:dark){:root{--bg:#12151c;--card:#1b2030;--fg:#e8ebf2;--mut:#98a0b3;--bd:#2c3347}}
+*{box-sizing:border-box}body{margin:0;font:15px system-ui,sans-serif;background:var(--bg);color:var(--fg)}
+header{display:flex;gap:16px;align-items:center;padding:12px 20px;background:var(--card);border-bottom:1px solid var(--bd);flex-wrap:wrap}
+header h1{font-size:17px;margin:0;margin-right:auto}
+nav button{background:none;border:0;color:var(--mut);padding:8px 12px;cursor:pointer;font:inherit;border-radius:6px}
+nav button.on{color:var(--acc);background:color-mix(in srgb,var(--acc) 12%,transparent)}
+main{max-width:980px;margin:20px auto;padding:0 16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:16px;margin-bottom:14px}
+.card h3{margin:0 0 8px;font-size:15px}
+input,select,textarea{width:100%;padding:8px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--fg);font:inherit}
+label{display:block;font-size:12px;color:var(--mut);margin:8px 0 3px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 12px}
+button.p{background:var(--acc);color:#fff;border:0;padding:8px 14px;border-radius:6px;cursor:pointer;font:inherit;margin-top:10px}
+button.s{background:none;border:1px solid var(--bd);color:var(--fg);padding:6px 10px;border-radius:6px;cursor:pointer;font:inherit}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row .grow{flex:1}
+.mut{color:var(--mut);font-size:13px}.ok{color:var(--ok)}.bad{color:var(--bad)}
+pre{background:var(--bg);padding:10px;border-radius:6px;overflow:auto;max-height:200px;font-size:12px;margin:8px 0 0}
+img.cap{max-width:100%;border:1px solid var(--bd);border-radius:6px;background:#fff}
+.hidden{display:none}
+</style></head><body>
+<header><h1>🔐 Login Automation Hub</h1>
+<nav id="nav"><button data-t="apps" class="on">Applications</button><button data-t="captcha">Captcha queue <span id="cn"></span></button><button data-t="otp">Mailbox &amp; OTP</button><button data-t="jobs">Runs</button><button data-t="api">API</button></nav></header>
+<main>
+<section id="apps"></section><section id="captcha" class="hidden"></section>
+<section id="otp" class="hidden"></section><section id="jobs" class="hidden"></section><section id="api" class="hidden"></section>
+</main>
+<script src="app.js"></script></body></html>

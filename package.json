@@ -1,0 +1,17 @@
+{
+  "name": "captcha-otp-automation",
+  "version": "1.0.0",
+  "description": "Server + UI that connects apps via API: fetches email OTPs, queues captchas for a human, and drives logins (TOTP / Google sign-in)",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "express": "^4.21.2",
+    "imapflow": "^1.0.164",
+    "mailparser": "^3.7.2",
+    "playwright-core": "^1.49.1"
+  }
+}
