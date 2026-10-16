@@ -17,7 +17,7 @@ ADMIN_TOKEN=choose-a-long-token npm start     # http://localhost:3000
 Env: `ADMIN_TOKEN` (API/UI bearer token), `SECRET_KEY` (encrypts stored passwords/TOTP seeds; otherwise a key file is generated in `data/`), `PORT`, `HOST` (default 127.0.0.1), `HEADLESS=false` to watch the browser, `CHROMIUM_PATH` for a custom Chromium (install one with `npx playwright-core install chromium`).
 
 ## Notes / limits
-- Captchas are **not** auto-bypassed; a person (or a solver you integrate) answers them. reCAPTCHA/hCaptcha-style token challenges can be queued via the API (`type`, `sitekey`) but need your own solver to answer.
+- Captchas are **not** auto-bypassed, and no bot-detection evasion is included. Image captchas are answered by a person in the UI. For reCAPTCHA/hCaptcha widgets run with `HEADLESS=false`: a person solves the real widget in the browser window and the run resumes. For sites you own, use the vendor test keys or disable the captcha in staging; for others, use their official API.
 - Google may block automated sign-in or show extra prompts (device confirmation, "unusual activity"); the Google flow is best-effort. Use only with accounts you own and sites whose terms permit automation.
 - Secrets are encrypted at rest; keep the server on localhost or behind HTTPS.
 - `npm test` runs unit tests and a browser e2e (mock site with captcha + emailed OTP).

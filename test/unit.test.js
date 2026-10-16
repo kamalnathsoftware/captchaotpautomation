@@ -50,3 +50,14 @@ test('captcha queue solve/expire', async () => {
   await new Promise((r) => setTimeout(r, 5));
   await assert.rejects(q.wait(e.id, { pollMs: 5 }), { code: 'CAPTCHA_EXPIRED' });
 });
+
+test('widget captcha: run resumes once the response field is filled', async () => {
+  const { Runner } = require('../src/automation');
+  const q = new CaptchaQueue();
+  let filled = false;
+  const page = { url: () => 'http://x', locator: () => ({ count: async () => 1 }), evaluate: async () => filled };
+  setTimeout(() => { filled = true; }, 1500);
+  const r = new Runner({ captcha: q, mailProvider: () => null });
+  assert.equal(await r.waitForWidgetCaptcha(page, { id: 'a', name: 'A' }), true);
+  assert.equal(q.list('solved').length, 1);
+});

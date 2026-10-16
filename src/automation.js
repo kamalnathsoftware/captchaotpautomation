@@ -31,8 +31,30 @@ class Runner {
     });
   }
 
-  async solveCaptchaIfPresent(page, app, ctx = page) {
+  // reCAPTCHA/hCaptcha: a person solves the real widget in the (headed) browser window.
+  // We only wait until the page's response field is filled, or the operator confirms in the UI.
+  async waitForWidgetCaptcha(page, app) {
+    const field = 'textarea[name="g-recaptcha-response"], textarea[name="h-captcha-response"]';
+    if (!(await page.locator(field).count())) return false;
+    const filled = () => page.evaluate((f) => [...document.querySelectorAll(f)].some((e) => e.value), field).catch(() => false);
+    if (await filled()) return true;
+    this.log('Captcha widget present - waiting for a person to solve it in the browser window (set HEADLESS=false)');
+    const task = this.captcha.create({ appId: app.id, type: 'widget', pageUrl: page.url(),
+      hint: `Solve the captcha in the browser window for ${app.name}, then press Submit here (or just solve it)`, ttlMs: 300000 });
+    const deadline = Date.now() + 300000;
+    while (Date.now() < deadline) {
+      if (await filled()) { this.captcha.solve(task.id, 'solved-in-browser'); return true; }
+      const t = this.captcha.get(task.id);
+      if (t.status === 'solved') return true;
+      if (t.status !== 'pending') break;
+      await new Promise((r) => setTimeout(r, 1000));
+    }
+    throw Object.assign(new Error('Captcha not solved in time'), { code: 'CAPTCHA_TIMEOUT' });
+  }
+
+  async solveCaptchaIfPresent(page, app) {
     const sel = app.selectors || {};
+    if (await this.waitForWidgetCaptcha(page, app)) return true;
     if (!sel.captchaImage || !(await page.locator(sel.captchaImage).first().isVisible().catch(() => false))) return false;
     this.log('Captcha detected - queued for operator');
     const png = await page.locator(sel.captchaImage).first().screenshot();
